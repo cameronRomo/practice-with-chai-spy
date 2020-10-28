@@ -2,6 +2,9 @@ const chai = require('chai');
 const expect = chai.expect;
 
 const Box = require('../src/Box');
+const spies = require('chai-spies');
+chai.use(spies);
+
 
 describe('Box', function() {
   it('should return true', function() {
@@ -41,4 +44,21 @@ describe('Box', function() {
       expect(box.height).to.equal(130);
     });
   });
+
+  describe('saveDetails', function() {
+    before(function() {
+      global.localStorage = {};
+      chai.spy.on(localStorage, ['setItem', 'getItem'], () => {})
+  })
+
+  it('should save details to localStorage', function() {
+    // setup
+    var box = new Box(100, 100);
+    // execution
+    box.saveDetails();
+    // expectation
+    expect(localStorage.setItem).to.have.been.called(1);
+    expect(localStorage.setItem).to.have.been.called.with('box', JSON.stringify({ width: 100, height: 100 }));
+  });
+});
 });

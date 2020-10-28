@@ -11,6 +11,11 @@ class Box {
   incrementSize(amount, dimension) {
     this[dimension] += amount;
   }
+
+  saveDetails() {
+    let stringifiedObject = JSON.stringify({ width: this.width, height: this.height })
+    localStorage.setItem('box', stringifiedObject);
+  }
 }
 
 module.exports = Box;
